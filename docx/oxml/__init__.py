@@ -6,9 +6,7 @@ corresponding to Open XML elements.
 """
 
 from __future__ import absolute_import
-from pptx.oxml.chart import CT_Chart
 from lxml import etree
-
 from .ns import NamespacePrefixedTag, nsmap
 
 

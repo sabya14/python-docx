@@ -146,6 +146,28 @@ class CT_NonVisualPictureProperties(BaseOxmlElement):
 	"""
 
 
+class CT_Chart(BaseOxmlElement):
+	"""
+	``<c:chart>`` element, a DrawingML picture
+	"""
+	@classmethod
+	def new(cls, rId):
+		"""
+		Return a new ``<c:chart>`` element populated with the minimal
+		contents required to define a viable chart element, based on the
+		values passed as parameters.
+		"""
+		chart = parse_xml(cls._chart_xml(rId))
+		chart.id = rId
+		return chart\
+
+	@classmethod
+	def _chart_xml(cls, rId):
+		return (
+			'<c:chart %s r:id="%s"/>\n'% (nsdecls('c', 'r'), rId)
+	)
+
+
 class CT_Picture(BaseOxmlElement):
 	"""
 	``<pic:pic>`` element, a DrawingML picture
