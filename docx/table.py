@@ -223,7 +223,7 @@ class _Cell(BlockItemContainer):
         self.add_paragraph()
         return table
 
-    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_new_para = False):
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_new_para=False):
         """
         Add a new chart of *chart_type* to the slide, positioned at (*x*,
         *y*), having size (*cx*, *cy*), and depicting *chart_data*.
