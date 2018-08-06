@@ -197,6 +197,25 @@ class _Cell(BlockItemContainer):
         super(_Cell, self).__init__(tc, parent)
         self._tc = tc
 
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_new_para = False):
+        """
+        Add a new chart of *chart_type* to the slide, positioned at (*x*,
+        *y*), having size (*cx*, *cy*), and depicting *chart_data*.
+        *chart_type* is one of the :ref:`XlChartType` enumeration values.
+        *chart_data* is a |ChartData| object populated with the categories
+        and series values for the chart. Note that a |GraphicFrame| shape
+        object is returned, not the |Chart| object contained in that graphic
+        frame shape. The chart object may be accessed using the :attr:`chart`
+        property of the returned |GraphicFrame| object.
+        """
+        if add_new_para:
+            run = self.add_paragraph().add_run()
+        else:
+            para = self.paragraphs[-1]
+            run = para.add_run()
+        r = run.add_chart(chart_type, x, y, cx, cy, chart_data)
+        return r
+
     def add_paragraph(self, text='', style=None):
         """
         Return a paragraph newly added to the end of the content in this

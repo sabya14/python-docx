@@ -111,15 +111,12 @@ class Document(ElementProxy):
         frame shape. The chart object may be accessed using the :attr:`chart`
         property of the returned |GraphicFrame| object.
         """
-        print('Chart Type', chart_type, 'Add new para', add_new_para)
         if add_new_para:
-            print('Adding New', len(self.paragraphs))
             run = self.add_paragraph().add_run()
         else:
             para = self.paragraphs[-1]
             run = para.add_run()
         r = run.add_chart(chart_type, x, y, cx, cy, chart_data)
-        print(run._r.xml)
         return r
 
     @property
