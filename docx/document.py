@@ -116,6 +116,7 @@ class Document(ElementProxy):
         else:
             para = self.paragraphs[-1]
             run = para.add_run()
+            print(run._r)
         r = run.add_chart(chart_type, x, y, cx, cy, chart_data)
         return r
 
