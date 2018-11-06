@@ -12,8 +12,8 @@ from .simpletypes import (
 )
 from .xmlchemy import (
 	BaseOxmlElement, OneAndOnlyOne, OptionalAttribute, RequiredAttribute,
-	ZeroOrOne
-)
+	ZeroOrOne,
+	OneOrMore)
 import lxml.etree as etree
 
 class CT_Blip(BaseOxmlElement):
@@ -139,51 +139,50 @@ class CT_Anchor(BaseOxmlElement):
 	extent = OneAndOnlyOne('wp:extent')
 	docPr = OneAndOnlyOne('wp:docPr')
 	graphic = OneAndOnlyOne('a:graphic')
-
-	@classmethod
-	def new(cls, cx, cy, shape_id, pic):
-		"""
-		Return a new ``<wp:inline>`` element populated with the values passed
-		as parameters.
-		"""
-		inline = parse_xml(cls._inline_xml())
-		inline.extent.cx = cx
-		inline.extent.cy = cy
-		inline.docPr.id = shape_id
-		inline.docPr.name = 'Picture %d' % shape_id
-		inline.graphic.graphicData.uri = (
-			'http://schemas.openxmlformats.org/drawingml/2006/picture'
-		)
-		inline.graphic.graphicData._insert_pic(pic)
-		return inline
-
-	@classmethod
-	def new_pic_inline(cls, shape_id, rId, filename, cx, cy):
-		"""
-		Return a new `wp:inline` element containing the `pic:pic` element
-		specified by the argument values.
-		"""
-		pic_id = 0  # Word doesn't seem to use this, but does not omit it
-		pic = CT_Picture.new(pic_id, filename, rId, cx, cy)
-		inline = cls.new(cx, cy, shape_id, pic)
-		inline.graphic.graphicData._insert_pic(pic)
-		return inline
-
-	@classmethod
-	def _inline_xml(cls):
-		return (
-				'<wp:anchor behindDoc="0" distT="0" distB="0" distL="0" distR="0" simplePos="0" locked="0"'
-				'layoutInCell="1" allowOverlap="1" relativeHeight="2" %s>\n'
-				'  <wp:extent cx="914400" cy="914400"/>\n'
-				'  <wp:docPr id="666" name="unnamed"/>\n'
-				'  <wp:cNvGraphicFramePr>\n'
-				'    <a:graphicFrameLocks noChangeAspect="1"/>\n'
-				'  </wp:cNvGraphicFramePr>\n'
-				'  <a:graphic>\n'
-				'    <a:graphicData uri="URI not set"/>\n'
-				'  </a:graphic>\n'
-				'</wp:anchor>' % nsdecls('wp', 'a', 'pic', 'r')
-		)
+	# @classmethod
+	# def new(cls, cx, cy, shape_id, pic):
+	# 	"""
+	# 	Return a new ``<wp:inline>`` element populated with the values passed
+	# 	as parameters.
+	# 	"""
+	# 	inline = parse_xml(cls._inline_xml())
+	# 	inline.extent.cx = cx
+	# 	inline.extent.cy = cy
+	# 	inline.docPr.id = shape_id
+	# 	inline.docPr.name = 'Picture %d' % shape_id
+	# 	inline.graphic.graphicData.uri = (
+	# 		'http://schemas.openxmlformats.org/drawingml/2006/picture'
+	# 	)
+	# 	inline.graphic.graphicData._insert_pic(pic)
+	# 	return inline
+	#
+	# @classmethod
+	# def new_pic_inline(cls, shape_id, rId, filename, cx, cy):
+	# 	"""
+	# 	Return a new `wp:inline` element containing the `pic:pic` element
+	# 	specified by the argument values.
+	# 	"""
+	# 	pic_id = 0  # Word doesn't seem to use this, but does not omit it
+	# 	pic = CT_Picture.new(pic_id, filename, rId, cx, cy)
+	# 	inline = cls.new(cx, cy, shape_id, pic)
+	# 	inline.graphic.graphicData._insert_pic(pic)
+	# 	return inline
+	#
+	# @classmethod
+	# def _inline_xml(cls):
+	# 	return (
+	# 			'<wp:anchor behindDoc="0" distT="0" distB="0" distL="0" distR="0" simplePos="0" locked="0"'
+	# 			'layoutInCell="1" allowOverlap="1" relativeHeight="2" %s>\n'
+	# 			'  <wp:extent cx="914400" cy="914400"/>\n'
+	# 			'  <wp:docPr id="666" name="unnamed"/>\n'
+	# 			'  <wp:cNvGraphicFramePr>\n'
+	# 			'    <a:graphicFrameLocks noChangeAspect="1"/>\n'
+	# 			'  </wp:cNvGraphicFramePr>\n'
+	# 			'  <a:graphic>\n'
+	# 			'    <a:graphicData uri="URI not set"/>\n'
+	# 			'  </a:graphic>\n'
+	# 			'</wp:anchor>' % nsdecls('wp', 'a', 'pic', 'r')
+	# 	)
 
 	@classmethod
 	def new_chart_anchor(cls, shape_id, rId, x, y, cx, cy):
@@ -194,12 +193,8 @@ class CT_Anchor(BaseOxmlElement):
 		# inline = parse_xml(cls._inline_xml())
 		anchor = parse_xml(cls._chart_xml())
 		chart = CT_Chart.new(rId)
-		# print(inline.getchildren())
-		print(anchor.getchildren())
-		# print('Inline', inline.graphic)
-		# anchor.set('graphic', inline.graphic)
-		# print('Anchor', anchor.graphic)
 		anchor.graphic.graphicData._insert_cChart(chart)
+		print(anchor)
 		return anchor
 
 	@classmethod
@@ -217,20 +212,6 @@ class CT_Anchor(BaseOxmlElement):
 				'</wp:inline>' % (nsdecls('wp', 'a'), nsdecls('a'))
 		)
 
-	@classmethod
-	def _inline_xml(cls):
-		print('Called _chart_xml')
-		return (
-				'<wp:inline %s>\n'
-				'  <wp:extent/>\n'
-				'  <wp:effectExtent l="0" t="0" r="0" b="0"/>\n'
-				'  <wp:docPr id="1" name="Chart 1"/>\n'
-				'  <wp:cNvGraphicFramePr/>\n'
-				'  <a:graphic %s>\n'
-				'    <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart"/>\n'
-				'  </a:graphic>\n'
-				'</wp:inline>' % (nsdecls('wp', 'a'), nsdecls('a'))
-		)
 
 class CT_NonVisualDrawingProps(BaseOxmlElement):
 	"""
