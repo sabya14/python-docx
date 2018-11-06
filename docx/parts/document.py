@@ -12,7 +12,7 @@ from ..document import Document
 from .numbering import NumberingPart
 from ..opc.constants import RELATIONSHIP_TYPE as RT
 from ..opc.part import XmlPart
-from ..oxml.shape import CT_Inline
+from ..oxml.shape import CT_Inline, CT_Anchor
 from ..shape import InlineShapes
 from ..shared import lazyproperty
 from .settings import SettingsPart
@@ -82,6 +82,17 @@ class DocumentPart(XmlPart):
         rId, chart = self.get_or_add_chart(chart_type, x, y, cx, cy, chart_data)
         shape_id = self.next_id
         return CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy), chart
+
+
+    def new_chart_anchor(self, chart_type, x, y, cx, cy, chart_data):
+        """
+        Return a newly-created `w:anchor` element containing the chart
+        with position *x* and *y* and width *cx* and height *y*
+        """
+        rId, chart = self.get_or_add_chart(chart_type, x, y, cx, cy, chart_data)
+        shape_id = self.next_id
+        return CT_Anchor.new_chart_anchor(shape_id, rId, x, y, cx, cy), chart
+
 
     def get_style_id(self, style_or_name, style_type):
         """
