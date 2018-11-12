@@ -46,20 +46,15 @@ class Run(Parented):
         if clear is not None:
             br.clear = clear
 
-    def add_chart(self, chart_type, x, y, cx, cy, chart_data):
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data, col_index):
         # """
         # Return an |InlineShape| instance containing the chart, added to the
         # end of this run.
         # """
-        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data)
+        print("In Doc Add Run Add Chart")
+        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data, col_index)
         self._r.add_drawing(inline)
         return chart
-        # """
-        # Trying to add anchor style element instead of inline
-        # """
-        # inline, chart = self.part.new_chart_anchor(chart_type, x, y, cx, cy, chart_data)
-        # self._r.add_drawing(inline)
-        # return chart
 
     def add_picture(self, image_path_or_stream, width=None, height=None):
         """

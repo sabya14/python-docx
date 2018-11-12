@@ -8,11 +8,14 @@ from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
 
+from docx.oxml import parse_xml
+from lxml import etree
+
 from ..document import Document
 from .numbering import NumberingPart
 from ..opc.constants import RELATIONSHIP_TYPE as RT
 from ..opc.part import XmlPart
-from ..oxml.shape import CT_Inline, CT_Anchor
+from ..oxml.shape import CT_Inline
 from ..shape import InlineShapes
 from ..shared import lazyproperty
 from .settings import SettingsPart
@@ -74,14 +77,16 @@ class DocumentPart(XmlPart):
         """
         return self.styles.get_by_id(style_id, style_type)
 
-    def new_chart_inline(self, chart_type, x, y, cx, cy, chart_data):
+    def new_chart_inline(self, chart_type, x, y, cx, cy, chart_data, colIndex):
         """
         Return a newly-created `w:inline` element containing the chart
         with position *x* and *y* and width *cx* and height *y*
         """
         rId, chart = self.get_or_add_chart(chart_type, x, y, cx, cy, chart_data)
         shape_id = self.next_id
-        return CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy), chart
+        obj = CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy, colIndex)
+        print("New", etree.tostring(obj, pretty_print=True))
+        return obj, chart
 
     def new_chart_anchor(self, chart_type, x, y, cx, cy, chart_data):
         """

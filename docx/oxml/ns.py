@@ -20,8 +20,7 @@ nsmap = {
     'r':   ('http://schemas.openxmlformats.org/officeDocument/2006/relations'
             'hips'),
     'w':   ('http://schemas.openxmlformats.org/wordprocessingml/2006/main'),
-    'wp':  ('http://schemas.openxmlformats.org/drawingml/2006/wordprocessing'
-            'Drawing'),
+    'wp':  ('http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing'),
     'xml': ('http://www.w3.org/XML/1998/namespace'),
     'xsi': ('http://www.w3.org/2001/XMLSchema-instance'),
 }
