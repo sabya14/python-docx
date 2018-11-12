@@ -103,7 +103,7 @@ class CT_Inline(BaseOxmlElement):
 		)
 
 	@classmethod
-	def new_chart_inline(cls, shape_id, rId, x, y, cx, cy, colIndex=False):
+	def new_chart_inline(cls, shape_id, rId, x, y, cx, cy, addBreak=False):
 		"""
 		Return a new ``<wp:inline>`` element populated with the values passed
 		as parameters.
@@ -116,19 +116,18 @@ class CT_Inline(BaseOxmlElement):
 		inline_string = etree.tostring(inline, pretty_print=True)
 		inline_string = inline_string.decode()
 		inline_string = inline_string.replace("wp:inline", "wp:anchor")
-		print("COL INDEX", colIndex)
-		if colIndex:
+		if addBreak:
 			inline_string = inline_string.replace("<wp:anchor",
-												  '<wp:anchor distT="0" distB="0" distL="0" '
-												  'distR="0" simplePos="0" '
+												  '<wp:anchor distT="0" distB="0" '
+												  'simplePos="0" '
+												  'distL="114300" distR="114300" '
+												  'relativeHeight="251662336" '
 												  'behindDoc="0" locked="1" allowOverlap="1"')
 
-		print("INLINE", inline_string)
 		return parse_xml(inline_string)
 
 	@classmethod
 	def _chart_xml(cls, rId=None):
-		print('Called _chart_xml')
 		if rId:
 			chartName = "Chart" + str(rId)
 		else:
@@ -136,16 +135,17 @@ class CT_Inline(BaseOxmlElement):
 		return (
 				'<wp:inline %s>\n'
 				'  <wp:extent/>\n'
-				'	<wp:simplePos X="0" Y="0"/>\n'
-				'<wp:positionH relativeFrom="margin">'
+				'	<wp:simplePos x="0" y="0"/>\n'
+					'<wp:positionH relativeFrom="margin">'
+                        '<wp:posOffset>12010</wp:posOffset>'
 						'<wp:align>left</wp:align>'
-                        '</wp:positionH>'
-                        '<wp:positionV relativeFrom="paragraph">'
-                        '<wp:posOffset>2324100</wp:posOffset>'
-                        '</wp:positionV>'
+					'</wp:positionH>'
+					'<wp:positionV relativeFrom="paragraph">\n'
+						'<wp:align>bottom</wp:align>'
+					'</wp:positionV>\n'
 				'  	<wp:effectExtent l="0" t="0" r="0" b="0"/>\n'
 				'  	<wp:docPr id="1" name="%s"/>\n'
-				'	<wp:wrapThrough wrapText="bothSides"/>\n'
+				'	<wp:WrapNone/>\n'
 				'  	<wp:cNvGraphicFramePr/>\n'
 				'  	<a:graphic %s>\n'
 				'    <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/chart"/>\n'

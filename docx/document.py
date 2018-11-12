@@ -100,7 +100,7 @@ class Document(ElementProxy):
         table.style = style
         return table
 
-    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_new_para = False):
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data, col_index, add_new_para=True):
         """
         Add a new chart of *chart_type* to the slide, positioned at (*x*,
         *y*), having size (*cx*, *cy*), and depicting *chart_data*.
@@ -111,14 +111,13 @@ class Document(ElementProxy):
         frame shape. The chart object may be accessed using the :attr:`chart`
         property of the returned |GraphicFrame| object.
         """
-        print("In Doc Add Chart")
         if add_new_para:
             run = self.add_paragraph().add_run()
         else:
             para = self.paragraphs[-1]
             run = para.add_run()
             print(run._r)
-        r = run.add_chart(chart_type, x, y, cx, cy, chart_data)
+        r = run.add_chart(chart_type, x, y, cx, cy, chart_data, col_index)
         return r
 
     @property

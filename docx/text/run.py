@@ -46,14 +46,16 @@ class Run(Parented):
         if clear is not None:
             br.clear = clear
 
-    def add_chart(self, chart_type, x, y, cx, cy, chart_data, col_index):
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_break=False):
         # """
         # Return an |InlineShape| instance containing the chart, added to the
         # end of this run.
         # """
-        print("In Doc Add Run Add Chart")
-        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data, col_index)
+        print("ADD BREAK AFTER", add_break)
+        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data, add_break)
         self._r.add_drawing(inline)
+        if add_break:
+            self.add_break(WD_BREAK.COLUMN)
         return chart
 
     def add_picture(self, image_path_or_stream, width=None, height=None):
@@ -80,14 +82,19 @@ class Run(Parented):
         """
         self._r._add_tab()
 
-    def add_text(self, text):
+    def add_text(self, text, newLine = False):
         """
         Returns a newly appended |_Text| object (corresponding to a new
         ``<w:t>`` child element) to the run, containing *text*. Compare with
         the possibly more friendly approach of assigning text to the
         :attr:`Run.text` property.
         """
-        t = self._r.add_t(text)
+        if newLine:
+            # self.add_break(WD_BREAK.LINE)
+            t = self._r.add_t(text)
+        else:
+            # self.add_break(WD_BREAK.LINE_CLEAR_RIGHT)
+            t = self._r.add_t(text)
         return _Text(t)
 
     @property

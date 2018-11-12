@@ -85,7 +85,6 @@ class DocumentPart(XmlPart):
         rId, chart = self.get_or_add_chart(chart_type, x, y, cx, cy, chart_data)
         shape_id = self.next_id
         obj = CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy, colIndex)
-        print("New", etree.tostring(obj, pretty_print=True))
         return obj, chart
 
     def new_chart_anchor(self, chart_type, x, y, cx, cy, chart_data):
