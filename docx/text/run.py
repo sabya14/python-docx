@@ -51,11 +51,11 @@ class Run(Parented):
         # Return an |InlineShape| instance containing the chart, added to the
         # end of this run.
         # """
-        print("ADD BREAK AFTER", add_break)
+        print("ADD BREAK AFTER THIS CHART", add_break)
         inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data, add_break)
         self._r.add_drawing(inline)
         if add_break:
-            self.add_break(WD_BREAK.COLUMN)
+            self.add_break(WD_BREAK.PAGE)
         return chart
 
     def add_picture(self, image_path_or_stream, width=None, height=None):
@@ -90,10 +90,11 @@ class Run(Parented):
         :attr:`Run.text` property.
         """
         if newLine:
-            # self.add_break(WD_BREAK.LINE)
             t = self._r.add_t(text)
+            self.add_break(WD_BREAK.PAGE)
         else:
             # self.add_break(WD_BREAK.LINE_CLEAR_RIGHT)
+            self.add_break(WD_BREAK.LINE)
             t = self._r.add_t(text)
         return _Text(t)
 
