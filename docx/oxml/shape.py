@@ -91,7 +91,7 @@ class CT_Inline(BaseOxmlElement):
 	def _inline_xml(cls):
 		return (
 				'<wp:inline %s>\n'
-				'  <wp:extent cx="914400" cy="914400"/>\n'
+				'  <wp:extent cx="0" cy="0"/>\n'
 				'  <wp:docPr id="666" name="unnamed"/>\n'
 				'  <wp:cNvGraphicFramePr>\n'
 				'    <a:graphicFrameLocks noChangeAspect="1"/>\n'
@@ -103,7 +103,7 @@ class CT_Inline(BaseOxmlElement):
 		)
 
 	@classmethod
-	def new_chart_inline(cls, shape_id, rId, x, y, cx, cy, addBreak=False):
+	def new_chart_inline(cls, shape_id, rId, x, y, cx, cy):
 		"""
 		Return a new ``<wp:inline>`` element populated with the values passed
 		as parameters.
@@ -116,14 +116,12 @@ class CT_Inline(BaseOxmlElement):
 		inline_string = etree.tostring(inline, pretty_print=True)
 		inline_string = inline_string.decode()
 		inline_string = inline_string.replace("wp:inline", "wp:anchor")
-		if addBreak:
-			inline_string = inline_string.replace("<wp:anchor",
-												  '<wp:anchor distT="0" distB="0" '
-												  'simplePos="0" '
-												  'distL="114300" distR="114300" '
-												  'relativeHeight="251662336" '
-												  'behindDoc="0" locked="1" allowOverlap="1"')
-
+		inline_string = inline_string.replace("<wp:anchor",
+												'<wp:anchor distT="0" distB="0" '
+												'simplePos="0" '
+												'distL="0" distR="0" '
+												'relativeHeight="0" '
+												'behindDoc="0" locked="1" allowOverlap="1"')
 		return parse_xml(inline_string)
 
 	@classmethod
@@ -137,7 +135,7 @@ class CT_Inline(BaseOxmlElement):
 				'  <wp:extent/>\n'
 				'	<wp:simplePos x="0" y="0"/>\n'
 					'<wp:positionH relativeFrom="margin">'
-                        '<wp:posOffset>12010</wp:posOffset>'
+                        '<wp:posOffset>0</wp:posOffset>'
 						'<wp:align>left</wp:align>'
 					'</wp:positionH>'
 					'<wp:positionV relativeFrom="paragraph">\n'

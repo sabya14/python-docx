@@ -33,6 +33,8 @@ class Run(Parented):
         *break_type* defaults to `WD_BREAK.LINE`.
         """
         type_, clear = {
+            WD_BREAK.SECTION_CONTINUOUS: (None, None),
+            WD_BREAK.TEXT_WRAPPING: (None,           None),
             WD_BREAK.LINE:             (None,           None),
             WD_BREAK.PAGE:             ('page',         None),
             WD_BREAK.COLUMN:           ('column',       None),
@@ -46,16 +48,13 @@ class Run(Parented):
         if clear is not None:
             br.clear = clear
 
-    def add_chart(self, chart_type, x, y, cx, cy, chart_data, add_break=False):
-        # """
-        # Return an |InlineShape| instance containing the chart, added to the
-        # end of this run.
-        # """
-        print("ADD BREAK AFTER THIS CHART", add_break)
-        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data, add_break)
+    def add_chart(self, chart_type, x, y, cx, cy, chart_data):
+        """
+        Return an |InlineShape| instance containing the chart, added to the
+        end of this run.
+        """
+        inline, chart = self.part.new_chart_inline(chart_type, x, y, cx, cy, chart_data)
         self._r.add_drawing(inline)
-        if add_break:
-            self.add_break(WD_BREAK.PAGE)
         return chart
 
     def add_picture(self, image_path_or_stream, width=None, height=None):
@@ -82,20 +81,14 @@ class Run(Parented):
         """
         self._r._add_tab()
 
-    def add_text(self, text, newLine = False):
+    def add_text(self, text):
         """
         Returns a newly appended |_Text| object (corresponding to a new
         ``<w:t>`` child element) to the run, containing *text*. Compare with
         the possibly more friendly approach of assigning text to the
         :attr:`Run.text` property.
         """
-        if newLine:
-            t = self._r.add_t(text)
-            self.add_break(WD_BREAK.PAGE)
-        else:
-            # self.add_break(WD_BREAK.LINE_CLEAR_RIGHT)
-            self.add_break(WD_BREAK.LINE)
-            t = self._r.add_t(text)
+        t = self._r.add_t(text=text)
         return _Text(t)
 
     @property

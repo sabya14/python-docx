@@ -34,6 +34,10 @@ class CT_R(BaseOxmlElement):
         self.insert(0, rPr)
         return rPr
 
+    def insert_br(self, br):
+        self.insert(0, br)
+        return br
+
     def add_t(self, text):
         """
         Return a newly added ``<w:t>`` element containing *text*.

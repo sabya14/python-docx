@@ -77,14 +77,14 @@ class DocumentPart(XmlPart):
         """
         return self.styles.get_by_id(style_id, style_type)
 
-    def new_chart_inline(self, chart_type, x, y, cx, cy, chart_data, colIndex):
+    def new_chart_inline(self, chart_type, x, y, cx, cy, chart_data):
         """
         Return a newly-created `w:inline` element containing the chart
         with position *x* and *y* and width *cx* and height *y*
         """
         rId, chart = self.get_or_add_chart(chart_type, x, y, cx, cy, chart_data)
         shape_id = self.next_id
-        obj = CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy, colIndex)
+        obj = CT_Inline.new_chart_inline(shape_id, rId, x, y, cx, cy)
         return obj, chart
 
     def new_chart_anchor(self, chart_type, x, y, cx, cy, chart_data):
